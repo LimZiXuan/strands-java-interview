@@ -10,9 +10,36 @@ package com.strands.spf;
  */
 public class SingleInstance {
 
-  public SingleInstance() {
-    // TODO Auto-generated constructor stub
+  private static volatile SingleInstance instance;
+
+  /**
+   * Private constructor prevents instantiation from outside this class.
+   */
+  private SingleInstance() {
   }
+
+
+    /**
+     * Returns the single shared instance, creating it on the first call.
+     *
+     * @return the one and only instance of SingleInstance for this JVM
+     */
+    public static SingleInstance getInstance()
+    {
+        SingleInstance result = instance;
+        if (result == null)
+        {
+            synchronized (SingleInstance.class)
+            {
+                result = instance;
+                if (result == null)
+                {
+                    instance = result = new SingleInstance();
+                }
+            }
+        }
+        return result;
+    }
 
   /**
    * @param args
