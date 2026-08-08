@@ -32,13 +32,16 @@ public class DefaultEventManager implements EventManager
     }
 
     private Collection calculateListeners(Class eventClass) {
-        Collection classListeners = (Collection) listenersByClass.get(eventClass);
-        if (allEventListeners.isEmpty())
-            return classListeners;
-
         Collection result = new ArrayList(allEventListeners);
-        if (classListeners != null)
-            result.addAll(classListeners);
+
+        Class currentClass = eventClass;
+        while (currentClass != null) {
+            Collection classListeners = (Collection) listenersByClass.get(currentClass);
+            if (classListeners != null)
+                result.addAll(classListeners);
+            currentClass = currentClass.getSuperclass();
+        }
+
         return result;
     }
 
