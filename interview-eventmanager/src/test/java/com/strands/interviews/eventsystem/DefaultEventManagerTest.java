@@ -124,4 +124,21 @@ public class DefaultEventManagerTest
 
         assertFalse(eventListenerMock.isCalled());
     }
+
+    /**
+     * Task 2: a listener that returns an empty array from getHandledEventClasses() is an
+     * all events listener and should receive every event published, regardless of type.
+     */
+
+    @Test
+    public void testListenerWithEmptyClassArrayReceivesAllEvents() {
+        EventListenerMock eventListenerMock = new EventListenerMock(new Class[] {});
+        eventManager.registerListener("some.key", eventListenerMock);
+
+        eventManager.publishEvent(new SimpleEvent(this));
+        eventManager.publishEvent(new SubEvent(this));
+
+        assertTrue(eventListenerMock.isCalled());
+        assertEquals(2, eventListenerMock.count);
+    }
 }
