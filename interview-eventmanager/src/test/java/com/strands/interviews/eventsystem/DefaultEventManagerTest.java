@@ -109,4 +109,19 @@ public class DefaultEventManagerTest
         {
         }
     }
+
+    /**
+     * Verify that a listener registered for SimpleEvent is not notified
+     * when a SubEvent is published.
+     */
+
+    @Test
+    public void testListenerForSuperclassIsNotNotifiedOfSubclassEvent() {
+        EventListenerMock eventListenerMock = new EventListenerMock(new Class[] { SimpleEvent.class });
+        eventManager.registerListener("some.key", eventListenerMock);
+
+        eventManager.publishEvent(new SubEvent(this));
+
+        assertFalse(eventListenerMock.isCalled());
+    }
 }
